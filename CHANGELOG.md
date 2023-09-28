@@ -1,5 +1,11 @@
 # empire-api
 
+## 0.0.9
+
+### Patch Changes
+
+-   14db93e: sad
+
 ## 0.0.8
 
 ### Patch Changes
