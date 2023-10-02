@@ -1,5 +1,11 @@
 # empire-api
 
+## 0.1.6
+
+### Patch Changes
+
+-   51525d2: api
+
 ## 0.1.5
 
 ### Patch Changes
