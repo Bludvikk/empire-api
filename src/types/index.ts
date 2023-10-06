@@ -47,4 +47,10 @@ export const DATACENTER_TABLES = [
 ] as const;
 
 
-export const DataCenterPath = z.enum([...DATACENTER_TABLES]);
+
+const baseHeaderSchema = z.object({ Authorization: z.string(), 'x-business-code': z.string()})
+
+export const dataCenterHeaderSchema = baseHeaderSchema.merge(z.object({path: z.enum([...DATACENTER_TABLES]).nullable() } ))
+
+
+// , 'x-user-id': z.string()  
