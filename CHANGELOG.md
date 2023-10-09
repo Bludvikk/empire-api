@@ -1,5 +1,11 @@
 # empire-api
 
+## 0.1.13
+
+### Patch Changes
+
+-   846084a: removed header from validation
+
 ## 0.1.12
 
 ### Patch Changes
