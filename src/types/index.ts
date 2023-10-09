@@ -46,11 +46,9 @@ export const DATACENTER_TABLES = [
   'supplier-group',
 ] as const;
 
-
-
 const baseHeaderSchema = z.object({ Authorization: z.string(), 'x-business-code': z.string()})
 
-export const dataCenterHeaderSchema = baseHeaderSchema.merge(z.object({path: z.enum([...DATACENTER_TABLES]).nullable() } ))
+export const dataCenterHeaderSchema = baseHeaderSchema.merge(z.object({path: z.enum([...DATACENTER_TABLES]) } ))
 
 
 // , 'x-user-id': z.string()  

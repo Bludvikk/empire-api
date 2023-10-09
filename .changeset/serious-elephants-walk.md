@@ -2,4 +2,4 @@
 'empire-api': patch
 ---
 
-ts-rest implementation
+removed nullable
