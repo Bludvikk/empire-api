@@ -1,5 +1,11 @@
 # empire-api
 
+## 0.1.10
+
+### Patch Changes
+
+-   ad98883: removed nullable
+
 ## 0.1.9
 
 ### Patch Changes
