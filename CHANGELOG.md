@@ -1,5 +1,11 @@
 # empire-api
 
+## 0.1.14
+
+### Patch Changes
+
+-   abacd4d: changed structure of validation
+
 ## 0.1.13
 
 ### Patch Changes
