@@ -1,5 +1,11 @@
 # empire-api
 
+## 0.1.11
+
+### Patch Changes
+
+-   9dc478e: latest one
+
 ## 0.1.10
 
 ### Patch Changes
