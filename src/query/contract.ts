@@ -62,7 +62,7 @@ const dataCenter = c.router({
         headers: dataCenterHeaderSchema,
         summary: 'Delete data',
         responses: {
-            201: c.type<any>(),
+            200: c.type<any>(),
         },
     },
     VALIDATE: {
@@ -71,7 +71,7 @@ const dataCenter = c.router({
         body: ValidatePostSchema,
         summary: 'Validate Data',
         responses: {
-            201: DataCenterBaseSchema,
+            201: c.type<any>(),
         },
     },
 });
