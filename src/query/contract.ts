@@ -7,7 +7,7 @@ import {
     DataCenterPutSchema,
     ValidatePostSchema,
 } from '../schema';
-import { PortalAuth, dataCenterHeaderSchema } from '../types/index';
+import { DataCenterBase, PortalAuth, DataCenterEnum, dataCenterHeaderSchema } from '../types/index';
 import { z } from 'nestjs-zod/z';
 
 const c = initContract();
