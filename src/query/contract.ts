@@ -11,7 +11,14 @@ import {
     supplierPostSchema,
     supplierSchema,
 } from '../schema';
-import { DataCenterBase, PortalAuth, DataCenterEnum, dataCenterHeaderSchema, ReferenceSearchQueryDto, referenceSearchQuerySchema } from '../types/index';
+import {
+    DataCenterBase,
+    PortalAuth,
+    DataCenterEnum,
+    dataCenterHeaderSchema,
+    ReferenceSearchQueryDto,
+    referenceSearchQuerySchema,
+} from '../types/index';
 import { z } from 'nestjs-zod/z';
 import { AddressPostDto, ContactPostDto } from '../dto';
 
@@ -63,7 +70,6 @@ const dataCenter = c.router({
         path: '/validate',
         body: ValidatePostSchema,
         summary: 'Validate Data',
-        headers: dataCenterHeaderSchema,
         responses: {
             201: DataCenterBaseSchema,
         },
@@ -174,7 +180,7 @@ export const contact = c.router({
         query: referenceSearchQuerySchema,
         summary: 'Get data',
     },
-})
+});
 
 export const address = c.router({
     getAll: {
@@ -221,8 +227,7 @@ export const address = c.router({
         query: referenceSearchQuerySchema,
         summary: 'Get data',
     },
-})
-
+});
 
 export const ApiContract = c.router({
     supplier,
