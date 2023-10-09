@@ -8,3 +8,6 @@ export { RefCategoryDto } from './ref-category';
 export { RefTermsDto } from './ref-terms';
 export { DataCenterPrismaQueryDto } from './data-center-query'
 export { DataCenterBaseDto } from './data-center-base'
+export { AddressPostDto } from './address-post'
+export { ContactPostDto } from './contact-post'
+export { SupplierPostDto } from './supplier-post'

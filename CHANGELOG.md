@@ -1,5 +1,12 @@
 # empire-api
 
+## 0.1.8
+
+### Patch Changes
+
+- api
+- fetcher
+
 ## 0.1.7
 
 ### Patch Changes

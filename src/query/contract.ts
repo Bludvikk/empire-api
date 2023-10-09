@@ -6,59 +6,16 @@ import {
     DataCenterPrismaQuerySchema,
     DataCenterPutSchema,
     ValidatePostSchema,
+    addressPostDtoSchema,
+    contactPostDtoSchema,
+    supplierPostSchema,
+    supplierSchema,
 } from '../schema';
-import { PortalAuth, dataCenterHeaderSchema } from '../types/index';
+import { DataCenterBase, PortalAuth, DataCenterEnum, dataCenterHeaderSchema, ReferenceSearchQueryDto, referenceSearchQuerySchema } from '../types/index';
 import { z } from 'nestjs-zod/z';
+import { AddressPostDto, ContactPostDto } from '../dto';
 
 const c = initContract();
-
-const supplier = c.router({
-    get: {
-        method: 'GET',
-        path: 'brand',
-        responses: {
-            200: DataCenterBaseSchema,
-        },
-        headers: z.object({
-            pagination: z.string().optional(),
-        }),
-        query: z.object({
-            take: z.string().transform(Number).optional(),
-            skip: z.string().transform(Number).optional(),
-            search: z.string().optional(),
-        }),
-        summary: 'Get data',
-    },
-    create: {
-        method: 'POST',
-        path: '/:path',
-        responses: {
-            200: DataCenterBaseSchema,
-        },
-        body: DataCenterPostSchema,
-        summary: 'Create data',
-        validateResponseOnClient: true,
-    },
-    update: {
-        method: 'PUT',
-        path: '/:path/:id',
-        responses: {
-            200: DataCenterBaseSchema,
-        },
-        headers: z.object({ pagination: z.string().optional() }),
-        body: DataCenterPutSchema,
-        summary: 'Update data',
-    },
-    delete: {
-        method: 'DELETE',
-        path: '/:path/:id',
-        body: DataCenterBaseSchema,
-        summary: 'Delete data',
-        responses: {
-            200: DataCenterDeleteSchema,
-        },
-    },
-});
 
 const dataCenter = c.router({
     getAll: {
@@ -134,10 +91,145 @@ export const item = c.router({
     },
 });
 
+export const supplier = c.router({
+    getAll: {
+        method: 'GET',
+        path: '/empire-core/supplier/',
+        responses: {
+            200: c.type<any>(),
+        },
+        query: DataCenterPrismaQuerySchema,
+        summary: 'Get data',
+    },
+    create: {
+        method: 'POST',
+        path: '/empire-core/supplier/',
+        responses: {
+            201: c.type<any>(),
+        },
+        body: supplierPostSchema,
+        summary: 'Create data',
+    },
+    update: {
+        method: 'PATCH',
+        path: '/empire-core/supplier/:id',
+        responses: {
+            200: c.type<any>(),
+        },
+        body: supplierPostSchema,
+        summary: 'Update data',
+    },
+    getById: {
+        method: 'GET',
+        path: '/empire-core/supplier/:id',
+        summary: 'Delete data',
+        responses: {
+            200: c.type<any>(),
+        },
+    },
+});
+
+export const contact = c.router({
+    getAll: {
+        method: 'GET',
+        path: '/empire-core/contact/',
+        responses: {
+            200: c.type<any>(),
+        },
+        query: DataCenterPrismaQuerySchema,
+        summary: 'Get data',
+    },
+    create: {
+        method: 'POST',
+        path: '/empire-core/contact/',
+        responses: {
+            200: c.type<any>(),
+        },
+        body: contactPostDtoSchema,
+        summary: 'Get data',
+    },
+    update: {
+        method: 'PATCH',
+        path: '/empire-core/contact/:id',
+        responses: {
+            200: c.type<any>(),
+        },
+        body: contactPostDtoSchema,
+        summary: 'Get data',
+    },
+    getById: {
+        method: 'GET',
+        path: '/empire-core/contact/:id',
+        responses: {
+            200: c.type<any>(),
+        },
+        summary: 'Get data',
+    },
+    getContactAsRef: {
+        method: 'GET',
+        path: '/empire-core/contact/data/reference',
+        responses: {
+            200: c.type<any>(),
+        },
+        query: referenceSearchQuerySchema,
+        summary: 'Get data',
+    },
+})
+
+export const address = c.router({
+    getAll: {
+        method: 'GET',
+        path: '/empire-core/address/',
+        responses: {
+            200: c.type<any>(),
+        },
+        query: DataCenterPrismaQuerySchema,
+        summary: 'Get data',
+    },
+    create: {
+        method: 'POST',
+        path: '/empire-core/address/',
+        responses: {
+            200: c.type<any>(),
+        },
+        body: addressPostDtoSchema,
+        summary: 'Get data',
+    },
+    update: {
+        method: 'PATCH',
+        path: '/empire-core/address/:id',
+        responses: {
+            200: c.type<any>(),
+        },
+        body: addressPostDtoSchema,
+        summary: 'Get data',
+    },
+    getById: {
+        method: 'GET',
+        path: '/empire-core/address/:id',
+        responses: {
+            200: c.type<any>(),
+        },
+        summary: 'Get data',
+    },
+    getContactAsRef: {
+        method: 'GET',
+        path: '/empire-core/address/data/reference',
+        responses: {
+            200: c.type<any>(),
+        },
+        query: referenceSearchQuerySchema,
+        summary: 'Get data',
+    },
+})
+
+
 export const ApiContract = c.router({
     supplier,
     dataCenter,
     item,
+    contact,
+    address,
 });
 
 // export const TestContract = c.router(
