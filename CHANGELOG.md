@@ -1,5 +1,11 @@
 # empire-api
 
+## 0.1.16
+
+### Patch Changes
+
+-   0a87faf: changeset
+
 ## 0.1.15
 
 ### Patch Changes
