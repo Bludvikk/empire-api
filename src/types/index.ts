@@ -1,5 +1,8 @@
 import { z } from 'zod';
 import * as dto from '../dto';
+import { MasterContactEmailSchema, MasterContactPhoneSchema } from '../schema';
+
+
 
 export type Prettify<T> = {
     [K in keyof T]: T[K];
@@ -49,9 +52,17 @@ export const DATACENTER_TABLES = [
     'country'
   ] as const
 
+  export type MasterContactEmail = z.infer<typeof MasterContactEmailSchema>;
+
+  export type MasterContactPhone = z.infer<typeof MasterContactPhoneSchema>;
+
 
 export type DataCenterTables = (typeof DATACENTER_TABLES)[number] | (string & {})
+
+
 export const DataCenterEnum = z.enum([...DATACENTER_TABLES]);
+
+export type tableRoutes = z.infer<typeof DataCenterEnum>
 
 const apiKey =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiZ0xvY2F0aW9uQ29kZSI6ImJnTG9jbWtkbzMiLCJiZ0J1c2luZXNzQ29kZSI6ImJnQnVzVUpWcE8iLCJleHBpcmVzSW4iOiIxMGQiLCJpYXQiOjE2OTM5MDE1NDIsImV4cCI6MTY5NDc2NTU0Mn0.5m3Pv7p-ArTY8oKmAvAKY9amLfEEM0wUKGAIsG_zDkU';

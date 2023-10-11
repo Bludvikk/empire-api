@@ -9,22 +9,33 @@ import {
     contactPostDtoSchema,
     supplierPostSchema,
 } from '../schema';
-import { dataCenterHeaderSchema, referenceSearchQuerySchema } from '../types/index';
+import { DataCenterBase, dataCenterHeaderSchema, referenceSearchQuerySchema } from '../types/index';
 const c = initContract();
 import { z } from 'zod';
+
+const tempSchema = z.object({
+    businessCode: z.string(),
+    id: z.string(),
+    code: z.string(),
+    name: z.string(),
+    default: z.boolean(),
+    active: z.boolean(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+});
 
 const dataCenter = c.router({
     getAll: {
         method: 'GET',
         path: '/',
         responses: {
-            200: c.type<any>(),
+            200: z.object({ data: z.array(tempSchema), totalCount: z.number() }),
         },
         query: DataCenterPrismaQuerySchema,
         summary: 'Get data',
         headers: dataCenterHeaderSchema,
     },
-    POST: {
+    create: {
         method: 'POST',
         path: '/',
         responses: {
@@ -34,7 +45,7 @@ const dataCenter = c.router({
         summary: 'Create data',
         headers: dataCenterHeaderSchema,
     },
-    PUT: {
+    update: {
         method: 'PUT',
         path: '/',
         responses: {
@@ -44,7 +55,7 @@ const dataCenter = c.router({
         headers: dataCenterHeaderSchema,
         summary: 'Update data',
     },
-    DELETE: {
+    delete: {
         method: 'DELETE',
         path: '/',
         body: DataCenterDeleteSchema,
@@ -54,7 +65,7 @@ const dataCenter = c.router({
             201: c.type<any>(),
         },
     },
-    VALIDATE: {
+    validate: {
         method: 'POST',
         path: '/validate',
         body: ValidatePostSchema,
