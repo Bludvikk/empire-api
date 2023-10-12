@@ -1,5 +1,11 @@
 # empire-api
 
+## 0.1.17
+
+### Patch Changes
+
+-   44a8bbe: new endpoints
+
 ## 0.1.16
 
 ### Patch Changes
