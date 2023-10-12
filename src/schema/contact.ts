@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
 export const contactSchema = z.object({
     id: z.string().min(1, { message: 'ID is required.' }).default('create'),
@@ -10,7 +10,21 @@ export const contactSchema = z.object({
     designationId: z.string().nullish(),
     genderId: z.string().nullish(),
     companyName: z.string().nullish(),
-    address: z.string().nullish()
-  })
+    address: z.string().nullish(),
+});
+
+export const MasterContactEmailSchema = z.object({
+    email: z.string().min(1, { message: 'Email is required' }).default(''),
+    isPrimary: z.boolean().default(false),
+});
+
+
+export const MasterContactPhoneSchema = z.object({
+    phone: z.string().min(1, { message: 'Phone number is required' }).default(''),
+    isPrimary: z.boolean().default(false),
+});
+
 
 export const contactPostDtoSchema = contactSchema.omit({ id: true });
+
+
