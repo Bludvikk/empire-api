@@ -1,5 +1,14 @@
-import { z } from 'zod'
+import { z } from 'zod';
+import { v4 as uuidv4 } from 'uuid';
+export const MasterContactEmailSchema = z.object({
+    email: z.string(),
+    isPrimary: z.boolean().default(false),
+});
 
+export const MasterContactPhoneSchema = z.object({
+    phone: z.string(),
+    isPrimary: z.boolean().default(false),
+});
 export const contactSchema = z.object({
     id: z.string().min(1, { message: 'ID is required.' }).default('create'),
     firstName: z.string().min(1, { message: 'First Name is required.' }).default(''),
@@ -10,7 +19,16 @@ export const contactSchema = z.object({
     designationId: z.string().nullish(),
     genderId: z.string().nullish(),
     companyName: z.string().nullish(),
-    address: z.string().nullish()
-  })
+    address: z.string().nullish(),
+    email: z.array(MasterContactEmailSchema).optional(),
+    phoneNo: z.array(MasterContactPhoneSchema).optional(),
+});
+
+export const MasterContactPutSchema = z.object({
+    key: z.string().default(uuidv4()),
+    values: contactSchema,
+});
+
+export type MasterContactPut = z.infer<typeof MasterContactPutSchema>;
 
 export const contactPostDtoSchema = contactSchema.omit({ id: true });

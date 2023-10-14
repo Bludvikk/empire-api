@@ -1,30 +1,69 @@
-import { initContract } from '@ts-rest/core';
+import { initClient, initContract } from '@ts-rest/core';
 import {
     DataCenterDeleteSchema,
     DataCenterPostSchema,
     DataCenterPrismaQuerySchema,
     DataCenterPutSchema,
+    MasterContactPutSchema,
+    // SupplierResponse,
     ValidatePostSchema,
     addressPostDtoSchema,
     contactPostDtoSchema,
     supplierPostSchema,
 } from '../schema';
-import { dataCenterHeaderSchema, referenceSearchQuerySchema } from '../types/index';
-const c = initContract();
+import {
+    DataCenterBase,
+    DataCenterTables,
+    RefCategory,
+    RefDiscount,
+    RefPayment,
+    RefTerms,
+    dataCenterHeaderSchema,
+    referenceSearchQuerySchema,
+} from '../types/index';
 import { z } from 'zod';
+import {
+    ContactPostResponse,
+    ContactResponse,
+    SupplierGetById,
+    SupplierPostResponse,
+    SupplierResponse,
+} from './objShape';
+import { promises } from 'dns';
+import axios, { Method } from 'axios';
+
+const c = initContract();
+
+export type DataCenter =
+    | {
+          path: 'category';
+          data: RefCategory[];
+          totalCount: number;
+      }
+    | {
+          path: 'discount';
+          totalCount: number;
+          data: RefDiscount[];
+      }
+    | {
+          path: 'common';
+          data: DataCenterBase[];
+          totalCount: number;
+      };
 
 const dataCenter = c.router({
     getAll: {
         method: 'GET',
         path: '/',
         responses: {
-            200: c.type<any>(),
+            // 200: z.object({ data: z.array(DataCenterBaseSchema.or(z.record(z.any()))), totalCount: z.number() }),
+            200: c.type<DataCenter>(),
         },
         query: DataCenterPrismaQuerySchema,
         summary: 'Get data',
         headers: dataCenterHeaderSchema,
     },
-    POST: {
+    create: {
         method: 'POST',
         path: '/',
         responses: {
@@ -34,7 +73,7 @@ const dataCenter = c.router({
         summary: 'Create data',
         headers: dataCenterHeaderSchema,
     },
-    PUT: {
+    update: {
         method: 'PUT',
         path: '/',
         responses: {
@@ -44,7 +83,7 @@ const dataCenter = c.router({
         headers: dataCenterHeaderSchema,
         summary: 'Update data',
     },
-    DELETE: {
+    delete: {
         method: 'DELETE',
         path: '/',
         body: DataCenterDeleteSchema,
@@ -54,7 +93,7 @@ const dataCenter = c.router({
             201: c.type<any>(),
         },
     },
-    VALIDATE: {
+    validate: {
         method: 'POST',
         path: '/validate',
         body: ValidatePostSchema,
@@ -65,7 +104,7 @@ const dataCenter = c.router({
     },
 });
 
-export const item = c.router({
+const item = c.router({
     getAll: {
         method: 'GET',
         path: '/empire-core/item/',
@@ -86,12 +125,12 @@ export const item = c.router({
     },
 });
 
-export const supplier = c.router({
+const supplier = c.router({
     getAll: {
         method: 'GET',
         path: '/empire-core/supplier/',
         responses: {
-            200: c.type<any>(),
+            200: c.type<{ data: SupplierResponse[] }>(),
         },
         query: DataCenterPrismaQuerySchema,
         summary: 'Get data',
@@ -100,7 +139,7 @@ export const supplier = c.router({
         method: 'POST',
         path: '/empire-core/supplier/',
         responses: {
-            201: c.type<any>(),
+            201: c.type<{ data: SupplierPostResponse }>(),
         },
         body: supplierPostSchema,
         summary: 'Create data',
@@ -109,7 +148,7 @@ export const supplier = c.router({
         method: 'PATCH',
         path: '/empire-core/supplier/:id',
         responses: {
-            200: c.type<any>(),
+            200: c.type<{ data: SupplierPostResponse }>(),
         },
         body: supplierPostSchema,
         summary: 'Update data',
@@ -119,17 +158,17 @@ export const supplier = c.router({
         path: '/empire-core/supplier/:id',
         summary: 'Delete data',
         responses: {
-            200: c.type<any>(),
+            200: c.type<{ data: SupplierGetById }>(),
         },
     },
 });
 
-export const contact = c.router({
+const contact = c.router({
     getAll: {
         method: 'GET',
         path: '/empire-core/contact/',
         responses: {
-            200: c.type<any>(),
+            200: c.type<{ data: ContactResponse[] }>(),
         },
         query: DataCenterPrismaQuerySchema,
         summary: 'Get data',
@@ -138,18 +177,18 @@ export const contact = c.router({
         method: 'POST',
         path: '/empire-core/contact/',
         responses: {
-            200: c.type<any>(),
+            200: c.type<{ data: ContactPostResponse[] }>(),
         },
         body: contactPostDtoSchema,
         summary: 'Get data',
     },
     update: {
         method: 'PATCH',
-        path: '/empire-core/contact/:id',
+        path: '/empire-core/contact',
         responses: {
             200: c.type<any>(),
         },
-        body: contactPostDtoSchema,
+        body: MasterContactPutSchema,
         summary: 'Get data',
     },
     getById: {
@@ -171,7 +210,7 @@ export const contact = c.router({
     },
 });
 
-export const address = c.router({
+const address = c.router({
     getAll: {
         method: 'GET',
         path: '/empire-core/address/',
@@ -226,7 +265,77 @@ export const ApiContract = c.router({
     address,
 });
 
-// export const TestContract = c.router(
-//     { getItem: { path: '/item', method: 'GET', responses: { 200: z.string() } } },
-//     { pathPrefix: '/api' },
-// );
+function gateway() {
+    const apiKey =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiZ0xvY2F0aW9uQ29kZSI6ImJnTG9jbWtkbzMiLCJiZ0J1c2luZXNzQ29kZSI6ImJnQnVzVUpWcE8iLCJleHBpcmVzSW4iOiIxMGQiLCJpYXQiOjE2OTM5MDE1NDIsImV4cCI6MTY5NDc2NTU0Mn0.5m3Pv7p-ArTY8oKmAvAKY9amLfEEM0wUKGAIsG_zDkU';
+
+    const businessCode = 'bgBusUJVpO';
+    return initClient(ApiContract, {
+        baseUrl: ``,
+        baseHeaders: {
+            Authorization: `Bearer ${apiKey}`,
+            'x-business-code': businessCode,
+            'Content-Type': 'application/json',
+        },
+        api: async ({ body, headers, method, path, signal }) => {
+            // return tsRestFetchApi({});
+            // const businessCode = headers.businessCode;
+
+            const xheaders = new Headers();
+            let urlPath = path + ''; // ---> '/empire-core/item/'
+
+            if (headers.path) {
+                urlPath = '/empire-core/data-center/' + headers.path;
+            }
+
+            const result = await axios.request({
+                method: method as Method,
+                url: `http://localhost:4000/api${urlPath}`,
+                headers,
+                data: body,
+                signal,
+            });
+
+            return { status: result.status, body: result.data, headers: xheaders, signal: result.config.signal };
+        },
+    });
+}
+
+export const api = gateway();
+
+async function zz() {
+    const obj = { active: true, code: 'asdasd', name: 'asdasd ', color: 'z' };
+
+    const res = await api.dataCenter.getAll({ headers: { path: 'category' } });
+
+    if (res.status === 200) {
+        const result = await res.body;
+
+        const common = getData(result).common();
+        const category = getData(result).category();
+        const discount = getData(result).discount();
+
+        common.map((r) => r.id);
+        category.map((r) => r.colorCode);
+        discount.map((r) => r.claim);
+    }
+
+    const post = await api.dataCenter.create({ headers: { path: 'category' }, body: { values: obj } });
+
+    return post.body;
+}
+
+function getData(result: DataCenter) {
+    return {
+        common() {
+            return result.path === 'common' ? result.data ?? [] : [];
+        },
+        category() {
+            return result.path === 'category' ? result.data ?? [] : [];
+        },
+
+        discount() {
+            return result.path === 'discount' ? result.data ?? [] : [];
+        },
+    };
+}
