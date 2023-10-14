@@ -1,5 +1,11 @@
 # empire-api
 
+## 0.1.18
+
+### Patch Changes
+
+-   c952698: contact updated
+
 ## 0.1.17
 
 ### Patch Changes
