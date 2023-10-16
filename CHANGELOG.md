@@ -1,5 +1,11 @@
 # empire-api
 
+## 0.1.19
+
+### Patch Changes
+
+-   0af3583: yes
+
 ## 0.1.15
 
 ### Patch Changes
