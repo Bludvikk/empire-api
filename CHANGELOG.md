@@ -1,5 +1,11 @@
 # empire-api
 
+## 0.1.20
+
+### Patch Changes
+
+-   0639c5b: completed contract based on requirements
+
 ## 0.1.15
 
 ### Patch Changes
