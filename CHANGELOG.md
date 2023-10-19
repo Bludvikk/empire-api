@@ -1,5 +1,11 @@
 # empire-api
 
+## 0.1.22
+
+### Patch Changes
+
+-   185e960: new contact
+
 ## 0.1.15
 
 ### Patch Changes
