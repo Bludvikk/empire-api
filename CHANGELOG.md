@@ -1,5 +1,11 @@
 # empire-api
 
+## 0.1.21
+
+### Patch Changes
+
+-   1a2c337: added structure of contact delete
+
 ## 0.1.15
 
 ### Patch Changes
